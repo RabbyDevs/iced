@@ -126,6 +126,7 @@ mod internal {
 
     use beacon::client::{self, Client};
     use beacon::span;
+    use beacon::span::present;
 
     use std::sync::atomic::{self, AtomicBool, AtomicUsize};
     use std::sync::{LazyLock, RwLock};
@@ -197,7 +198,11 @@ mod internal {
         }
 
         let message = if message.len() > 49 {
-            format!("{}...", &message[..49])
+            message
+                .chars()
+                .take(49)
+                .chain("...".chars())
+                .collect::<String>()
         } else {
             message
         };
@@ -275,13 +280,13 @@ mod internal {
         }
     }
 
-    fn to_primitive(primitive: Primitive) -> span::Primitive {
+    fn to_primitive(primitive: Primitive) -> present::Primitive {
         match primitive {
-            Primitive::Quad => span::Primitive::Quad,
-            Primitive::Triangle => span::Primitive::Triangle,
-            Primitive::Shader => span::Primitive::Shader,
-            Primitive::Text => span::Primitive::Text,
-            Primitive::Image => span::Primitive::Image,
+            Primitive::Quad => present::Primitive::Quad,
+            Primitive::Triangle => present::Primitive::Triangle,
+            Primitive::Shader => present::Primitive::Shader,
+            Primitive::Text => present::Primitive::Text,
+            Primitive::Image => present::Primitive::Image,
         }
     }
 
